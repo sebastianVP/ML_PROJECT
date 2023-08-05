@@ -7,7 +7,7 @@
 ## Librerias usadas:
 
 * **Librerias** : sklearn,streamlit,pandas, numpy.
-
+* **Link** : [Video de Aprendizaje](https://www.youtube.com/watch?v=JwSS70SZdyM&t=6671s)
 
 
 
