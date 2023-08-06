@@ -7,7 +7,7 @@ Ing. Electronico UNI
 import os
 import json
 # DEBEMOS IR A SETTING PARA OBTENER NUESTRA CLAVE
-api_token= {"username":"alexandervp","key":"ddd2ba4d2baa8c254b5dc218d86b62ba"}
+api_token= {"username":"alexandervp","key":"aquivatukeydoctor"}
 
 cmd = 'mkdir /c/Users/soporte/.kaggle'
 os.system(cmd)
