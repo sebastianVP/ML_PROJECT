@@ -36,12 +36,47 @@ else:
        data = { 'island'              : island,
                 'bill_length_mm'      : pico_longitud_mm,
                 'bill_depth_mm'       : pico_profundidad_mm,
-                'flipper_legnth_mm'   : aleta_longitud_mm,
-                'bdy_mass_g'          : masa_corporal_g,
+                'flipper_length_mm'   : aleta_longitud_mm,
+                'body_mass_g'          : masa_corporal_g,
                 'sex'                 : sex}
-       feautures = pd.DataFrame(data,index=[0])
+       features = pd.DataFrame(data,index=[0])
        return features
-   inputs_df = user_input_features()
+   input_df = user_input_features()
 # Combines user input features with entire penguins dataset
 # this will be useful for the encoding phase
 
+penguins_raw = pd.read_csv('penguins_cleaned.csv')
+penguins     = penguins_raw.drop(columns = ['species'])
+df           = pd.concat([input_df,penguins],axis = 0)
+
+## ENCODING OF ORDINAL FEATURES
+encode = ['sex','island']
+for col in encode:
+    dummy = pd.get_dummies(df[col],prefix=col)
+    df    = pd.concat([df,dummy],axis=1)
+    del df[col]
+
+df = df[:1] # SELECCIONAMOS SOLO LA PRIMERA FILA(DATA DEL USUARIO DE ENTRADA)
+
+# DISPLAYS THE USER INPUT FEATURES
+st.subheader("User Input features")
+
+if uploaded_file is not None:
+   st.write(df)
+else:
+   st.write('Awaiting CSV File to ve uploaded. Currently using example input parameters(shown below),')
+   st.write(df)
+
+# READS IN SAVE CLASSIFICATION MODEL
+# https://github.com/dataprofessor/penguins-heroku/blob/master/penguins_clf.pkl
+load_clf = pickle.load(open('penguins_clf.pkl','rb'))
+# APPLY MODEL TO MAKE PREDICTIONS
+prediction       = load_clf.predict(df)
+prediction_proba = load_clf.predict_proba(df)
+
+st.subheader('Prediction')
+penguins_species = np.array(['Adelie','Chinstrap','Gentoo'])
+st.write(penguins_species[prediction])
+
+st.subheader('Prediction Probability')
+st.write(prediction_proba)
